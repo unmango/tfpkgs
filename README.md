@@ -16,7 +16,7 @@ Nix packages for the Terraform and OpenTofu ecosystem.
 Providers install into the layout `terraform.withPlugins` and `opentofu.withPlugins` expect, so they can be used anywhere a nixpkgs provider can:
 
 ```nix
-pkgs.opentofu.withPlugins (_: [ pkgs.tfpkgs.terraform-provider-example ])
+pkgs.opentofu.withPlugins (_: [ pkgs.tfpkgs.terraform-provider-sops ])
 ```
 
 ## Adding a provider
