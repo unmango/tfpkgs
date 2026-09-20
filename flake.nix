@@ -1,5 +1,5 @@
 {
-  description = "A Nix flake";
+  description = "Terraform packages";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -28,11 +28,16 @@
 
       perSystem =
         { pkgs, ... }:
+        let
+          terraform = pkgs.callPackage ./terraform.nix {};
+        in
         {
           devShells.default = pkgs.mkShellNoCC {
             packages = with pkgs; [
               gnumake
               nixfmt
+              opentofu
+              terraform
             ];
           };
 
