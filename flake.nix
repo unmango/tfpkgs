@@ -26,23 +26,38 @@
         treefmt-nix.flakeModule
       ];
 
+      flake.overlays.default = final: _prev: {
+        tfpkgs = final.callPackage ./packages.nix { };
+      };
+
       perSystem =
         { pkgs, ... }:
         let
-          terraform = pkgs.callPackage ./terraform.nix {};
+          inherit (pkgs) lib;
+          tfpkgs = pkgs.callPackage ./packages.nix { };
+          derivations = lib.filterAttrs (_: lib.isDerivation) tfpkgs;
         in
         {
+          packages = derivations;
+          checks = derivations;
+
+          # The full scope, including helpers like buildTerraformProvider.
+          legacyPackages = tfpkgs;
+
           devShells.default = pkgs.mkShellNoCC {
             packages = with pkgs; [
               gnumake
+              nix-update
               nixfmt
               opentofu
-              terraform
+              tfpkgs.terraform
             ];
           };
 
           treefmt.programs = {
+            deadnix.enable = true;
             nixfmt.enable = true;
+            statix.enable = true;
           };
         };
     };

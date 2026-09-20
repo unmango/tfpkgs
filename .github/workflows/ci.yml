@@ -20,5 +20,5 @@ jobs:
         with:
           name: unstoppablemango
 
-      - run: nix flake check
-      - run: nix build .#
+      # `checks` contains every package, so this builds the whole package set.
+      - run: nix flake check --print-build-logs

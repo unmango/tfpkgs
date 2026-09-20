@@ -1,0 +1,102 @@
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+}:
+
+# Builds a Terraform/OpenTofu provider from source.
+#
+# The installed layout matches the one `terraform.withPlugins` and
+# `opentofu.withPlugins` expect, so providers built here are drop-in
+# replacements for the ones in nixpkgs.
+lib.makeOverridable (
+  {
+    # Registry namespace and provider name, e.g. "hashicorp" and "aws" for
+    # registry.terraform.io/hashicorp/aws.
+    namespace,
+    name,
+    version,
+    hash,
+    vendorHash,
+    owner ? namespace,
+    repo ? "terraform-provider-${name}",
+    rev ? "v${version}",
+    registry ? "registry.terraform.io",
+    license,
+    fetcher ? fetchFromGitHub,
+    goModule ? buildGoModule,
+    ...
+  }@args:
+
+  let
+    providerSourceAddress = "${registry}/${namespace}/${name}";
+
+    builderArgs = removeAttrs args [
+      "namespace"
+      "name"
+      "owner"
+      "repo"
+      "rev"
+      "hash"
+      "registry"
+      "license"
+      "fetcher"
+      "goModule"
+    ];
+  in
+  goModule (
+    builderArgs
+    // {
+      pname = repo;
+      inherit version vendorHash;
+
+      src = fetcher {
+        name = "source-${rev}";
+        inherit
+          owner
+          repo
+          rev
+          hash
+          ;
+      };
+
+      subPackages = [ "." ];
+
+      # Providers distributed through the registry are built by goreleaser,
+      # which requires cgo to be disabled.
+      env.CGO_ENABLED = 0;
+
+      ldflags = [
+        "-s"
+        "-w"
+        "-X main.version=${version}"
+        "-X main.commit=${rev}"
+      ];
+
+      # Provider test suites expect live credentials.
+      doCheck = false;
+
+      postInstall = ''
+        dir=$out/libexec/terraform-providers/${providerSourceAddress}/${version}/''${GOOS}_''${GOARCH}
+        mkdir -p "$dir"
+        mv $out/bin/* "$dir/terraform-provider-${name}_v${version}"
+        rmdir $out/bin
+      '';
+
+      passthru = {
+        provider-source-address = providerSourceAddress;
+        updateScript = nix-update-script { extraArgs = [ "--flake" ]; };
+      }
+      // args.passthru or { };
+
+      meta = {
+        description = "Terraform provider for ${name}";
+        homepage = "https://${registry}/providers/${namespace}/${name}";
+        license = if lib.isString license then lib.getLicenseFromSpdxId license else license;
+        platforms = lib.platforms.unix;
+      }
+      // args.meta or { };
+    }
+  )
+)
