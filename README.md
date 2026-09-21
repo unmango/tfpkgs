@@ -3,6 +3,7 @@
 [![CI](https://github.com/unmango/tfpkgs/actions/workflows/ci.yml/badge.svg)](https://github.com/unmango/tfpkgs/actions/workflows/ci.yml)
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue.svg)](https://unstoppablemango.cachix.org)
 [![License](https://img.shields.io/github/license/unmango/tfpkgs)](LICENSE)
+[![Built with Nix](https://img.shields.io/badge/Built_With-Nix-5277C3.svg?logo=nixos&logoColor=white)](https://builtwithnix.org)
 
 Nix packages for the Terraform and OpenTofu ecosystem.
 
