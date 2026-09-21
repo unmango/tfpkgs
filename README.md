@@ -35,6 +35,7 @@ Providers:
 | Attribute | Upstream |
 | --- | --- |
 | `terraform-provider-github` | [integrations/terraform-provider-github](https://github.com/integrations/terraform-provider-github) |
+| `terraform-provider-gitlab` | [gitlab-org/terraform-provider-gitlab](https://gitlab.com/gitlab-org/terraform-provider-gitlab) |
 | `terraform-provider-pfsense` | [marshallford/terraform-provider-pfsense](https://github.com/marshallford/terraform-provider-pfsense) |
 | `terraform-provider-sops` | [carlpett/terraform-provider-sops](https://github.com/carlpett/terraform-provider-sops) |
 
