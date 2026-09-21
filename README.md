@@ -44,6 +44,12 @@ Code generation tools from the [Terraform plugin codegen](https://developer.hash
 | `terraform-plugin-codegen-framework` | `tfplugingen-framework` | [hashicorp/terraform-plugin-codegen-framework](https://github.com/hashicorp/terraform-plugin-codegen-framework) |
 | `terraform-plugin-codegen-openapi` | `tfplugingen-openapi` | [hashicorp/terraform-plugin-codegen-openapi](https://github.com/hashicorp/terraform-plugin-codegen-openapi) |
 
+Backends:
+
+| Attribute | Binary | Upstream |
+| --- | --- | --- |
+| `terraform-backend-git` | `terraform-backend-git` | [plumber-cd/terraform-backend-git](https://github.com/plumber-cd/terraform-backend-git) |
+
 `terraform` is a shim exposing `opentofu` under the `terraform` name.
 
 ## Adding a provider
