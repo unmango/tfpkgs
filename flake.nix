@@ -10,6 +10,11 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
 
+    gomod2nix = {
+      url = "github:nix-community/gomod2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -26,18 +31,26 @@
         treefmt-nix.flakeModule
       ];
 
-      flake.overlays.default = final: _prev: {
-        tfpkgs = final.callPackage ./packages.nix { };
-      };
+      flake.overlays.default = inputs.nixpkgs.lib.composeManyExtensions [
+        inputs.gomod2nix.overlays.default
+        (final: _prev: {
+          tfpkgs = final.callPackage ./packages.nix { };
+        })
+      ];
 
       perSystem =
-        { pkgs, ... }:
+        { pkgs, system, ... }:
         let
           inherit (pkgs) lib;
           tfpkgs = pkgs.callPackage ./packages.nix { };
           derivations = lib.filterAttrs (_: lib.isDerivation) tfpkgs;
         in
         {
+          _module.args.pkgs = import inputs.nixpkgs {
+            inherit system;
+            overlays = [ inputs.gomod2nix.overlays.default ];
+          };
+
           packages = derivations;
           checks = derivations;
 
@@ -47,6 +60,8 @@
           devShells.default = pkgs.mkShellNoCC {
             packages = with pkgs; [
               gnumake
+              go
+              gomod2nix
               nix-update
               nixfmt
               opentofu
