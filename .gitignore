@@ -1,0 +1,8 @@
+/result*
+*.local
+.direnv/
+bin/
+.claude/*
+!.claude/skills/
+.agents/*
+!.agents/skills/
