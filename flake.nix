@@ -39,16 +39,22 @@
       ];
 
       perSystem =
-        { pkgs, system, ... }:
+        {
+          pkgs,
+          lib,
+          system,
+          ...
+        }:
         let
-          inherit (pkgs) lib;
           tfpkgs = pkgs.callPackage ./packages.nix { };
           derivations = lib.filterAttrs (_: lib.isDerivation) tfpkgs;
         in
         {
           _module.args.pkgs = import inputs.nixpkgs {
             inherit system;
-            overlays = [ inputs.gomod2nix.overlays.default ];
+            overlays = with inputs; [
+              gomod2nix.overlays.default
+            ];
           };
 
           packages = derivations;

@@ -2,9 +2,7 @@
   lib,
   buildGoApplication,
   fetchFromGitHub,
-  gomod2nix,
-  nix-update,
-  writeShellApplication,
+  mkUpdateScript,
 }:
 
 # Builds a Terraform/OpenTofu provider from source.
@@ -89,20 +87,7 @@ lib.makeOverridable (
       passthru = {
         provider-source-address = providerSourceAddress;
 
-        # Bumps the version and source hash, then regenerates gomod2nix.toml
-        # for the new source. Run from the repository root.
-        updateScript = writeShellApplication {
-          name = "update-${repo}";
-          runtimeInputs = [
-            nix-update
-            gomod2nix
-          ];
-          text = ''
-            nix-update --flake ${repo}
-            src=$(nix build --no-link --print-out-paths ".#${repo}.src")
-            gomod2nix generate --dir "$src" --outdir "pkgs/${repo}"
-          '';
-        };
+        updateScript = mkUpdateScript { attr = repo; };
       }
       // args.passthru or { };
 
