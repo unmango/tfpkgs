@@ -5,6 +5,7 @@
 [![License](https://img.shields.io/github/license/unmango/tfpkgs)](LICENSE)
 [![Built with Nix](https://img.shields.io/badge/Built_With-Nix-5277C3.svg?logo=nixos&logoColor=white)](https://builtwithnix.org)
 [![Last commit](https://img.shields.io/github/last-commit/unmango/tfpkgs)](https://github.com/unmango/tfpkgs/commits/main)
+[![OpenTofu](https://img.shields.io/badge/OpenTofu-FFDA18?logo=opentofu&logoColor=black)](https://opentofu.org)
 
 Nix packages for the Terraform and OpenTofu ecosystem.
 
