@@ -1,12 +1,39 @@
-{ buildTerraformProvider }:
+{
+  lib,
+  inputs,
+  go,
+  stdenv,
+  runCommandLocal,
+}:
 
-buildTerraformProvider {
-  namespace = "marshallford";
+# Upstream generates the provider's Go source from a pfrest OpenAPI spec at
+# build time, so there is nothing to fetch and hand to buildTerraformProvider.
+# Its flake output is relocated into the plugin layout instead.
+let
+  upstream = inputs.terraform-provider-pfsense.packages.${stdenv.hostPlatform.system}.default;
+
+  registry = "registry.terraform.io";
+  namespace = "unstoppablemango";
   name = "pfsense";
-  version = "0.22.0";
-  hash = "sha256-hGPq3m41DmfvpZgHSYVVH/vqhyU5WrgK3P4d6NBlU6k=";
-  modules = ./gomod2nix.toml;
-  license = "MIT";
+  providerSourceAddress = "${registry}/${namespace}/${name}";
+  inherit (upstream) version;
+in
+runCommandLocal "terraform-provider-${name}-${version}"
+  {
+    passthru = {
+      inherit upstream;
+      provider-source-address = providerSourceAddress;
+    };
 
-  meta.description = "Terraform provider to configure pfSense firewall/router devices";
-}
+    meta = upstream.meta or { } // {
+      description = "Terraform provider for pfSense using pfrest";
+      homepage = "https://github.com/UnstoppableMango/terraform-provider-pfsense";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+    };
+  }
+  ''
+    dir=$out/libexec/terraform-providers/${providerSourceAddress}/${version}/${go.GOOS}_${go.GOARCH}
+    mkdir -p "$dir"
+    cp ${upstream}/bin/terraform-provider-${name} "$dir/terraform-provider-${name}_v${version}"
+  ''

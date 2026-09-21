@@ -34,7 +34,10 @@ Providers:
 
 | Attribute | Upstream |
 | --- | --- |
-| `terraform-provider-pfsense` | [marshallford/terraform-provider-pfsense](https://github.com/marshallford/terraform-provider-pfsense) |
+| `terraform-provider-git` | [UnstoppableMango/terraform-provider-git](https://github.com/UnstoppableMango/terraform-provider-git) |
+| `terraform-provider-netgear` | [unmango/terraform-provider-netgear](https://github.com/unmango/terraform-provider-netgear) |
+| `terraform-provider-pfsense` | [UnstoppableMango/terraform-provider-pfsense](https://github.com/UnstoppableMango/terraform-provider-pfsense) |
+| `terraform-provider-pfsense-marshallford` | [marshallford/terraform-provider-pfsense](https://github.com/marshallford/terraform-provider-pfsense) |
 | `terraform-provider-sops` | [carlpett/terraform-provider-sops](https://github.com/carlpett/terraform-provider-sops) |
 
 Code generation tools from the [Terraform plugin codegen](https://developer.hashicorp.com/terraform/plugin/code-generation) toolchain:

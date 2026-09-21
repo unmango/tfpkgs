@@ -25,6 +25,9 @@ lib.makeOverridable (
     repo ? "terraform-provider-${name}",
     rev ? "v${version}",
     registry ? "registry.terraform.io",
+    # Attribute the package is exposed as, i.e. its directory name under pkgs/.
+    # Only needs setting when that differs from `repo`.
+    attr ? repo,
     license,
     fetcher ? fetchFromGitHub,
     ...
@@ -41,6 +44,7 @@ lib.makeOverridable (
       "rev"
       "hash"
       "registry"
+      "attr"
       "license"
       "fetcher"
     ];
@@ -87,7 +91,7 @@ lib.makeOverridable (
       passthru = {
         provider-source-address = providerSourceAddress;
 
-        updateScript = mkUpdateScript { attr = repo; };
+        updateScript = mkUpdateScript { inherit attr; };
       }
       // args.passthru or { };
 
