@@ -21,6 +21,24 @@ Providers install into the layout `terraform.withPlugins` and `opentofu.withPlug
 pkgs.opentofu.withPlugins (_: [ pkgs.tfpkgs.terraform-provider-sops ])
 ```
 
+## Packages
+
+Providers:
+
+| Attribute | Upstream |
+| --- | --- |
+| `terraform-provider-pfsense` | [marshallford/terraform-provider-pfsense](https://github.com/marshallford/terraform-provider-pfsense) |
+| `terraform-provider-sops` | [carlpett/terraform-provider-sops](https://github.com/carlpett/terraform-provider-sops) |
+
+Code generation tools from the [Terraform plugin codegen](https://developer.hashicorp.com/terraform/plugin/code-generation) toolchain:
+
+| Attribute | Binary | Upstream |
+| --- | --- | --- |
+| `terraform-plugin-codegen-framework` | `tfplugingen-framework` | [hashicorp/terraform-plugin-codegen-framework](https://github.com/hashicorp/terraform-plugin-codegen-framework) |
+| `terraform-plugin-codegen-openapi` | `tfplugingen-openapi` | [hashicorp/terraform-plugin-codegen-openapi](https://github.com/hashicorp/terraform-plugin-codegen-openapi) |
+
+`terraform` is a shim exposing `opentofu` under the `terraform` name.
+
 ## Adding a provider
 
 Create `pkgs/terraform-provider-<name>/package.nix`, in a directory named for the attribute you want:
