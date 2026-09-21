@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(nix eval *)",
-      "Bash(git mv *)"
-    ]
-  }
-}
