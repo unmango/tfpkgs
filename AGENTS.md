@@ -35,6 +35,7 @@ The attribute name is the directory (or file) name, so `pkgs/terraform-provider-
 Key behaviors a provider definition depends on:
 
 - Source coordinates are derived: `owner = namespace`, `repo = "terraform-provider-${name}"`, `rev = "v${version}"`. Override individually when upstream diverges.
+- `attr` defaults to `repo` and names the directory under [pkgs/](pkgs/). Set it when the two differ, as they do when two namespaces ship a provider of the same name; `passthru.updateScript` reads it.
 - `postInstall` relocates the binary to `$out/libexec/terraform-providers/<registry>/<namespace>/<name>/<version>/<goos>_<goarch>/`, the layout `terraform.withPlugins` and `opentofu.withPlugins` expect.
 - `CGO_ENABLED = 0` (matches goreleaser) and `doCheck = false` (provider tests need live credentials).
 - `passthru.updateScript` runs `nix-update` then regenerates `gomod2nix.toml`; `make update-package` invokes it.

@@ -19,6 +19,18 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # terraform-provider-pfsense generates its go.mod, then applies a checked-in
+    # patch to it. The patch's first hunk covers the `go` directive, so it only
+    # applies under the Go version its own lock pins. Without this input, flake
+    # lock deduplication would point it at the nixpkgs above and the patch would
+    # fail. Bump it in step with upstream's flake.lock.
+    nixpkgs-pfsense.url = "github:nixos/nixpkgs/b5aa0fbd538984f6e3d201be0005b4463d8b09f8";
+
+    terraform-provider-pfsense = {
+      url = "github:UnstoppableMango/terraform-provider-pfsense";
+      inputs.nixpkgs.follows = "nixpkgs-pfsense";
+    };
   };
 
   outputs =
@@ -34,7 +46,7 @@
       flake.overlays.default = inputs.nixpkgs.lib.composeManyExtensions [
         inputs.gomod2nix.overlays.default
         (final: _prev: {
-          tfpkgs = final.callPackage ./packages.nix { };
+          tfpkgs = final.callPackage ./packages.nix { inherit inputs; };
         })
       ];
 
@@ -46,7 +58,7 @@
           ...
         }:
         let
-          tfpkgs = pkgs.callPackage ./packages.nix { };
+          tfpkgs = pkgs.callPackage ./packages.nix { inherit inputs; };
           derivations = lib.filterAttrs (_: lib.isDerivation) tfpkgs;
         in
         {
