@@ -52,6 +52,13 @@ Backends:
 
 `terraform` is a shim exposing `opentofu` under the `terraform` name.
 
+## Versioning
+
+Releases are cut by [release-please](https://github.com/googleapis/release-please) from Conventional Commit messages.
+The repository version carries little meaning: each package tracks its own upstream version, and a release only marks that packages were added, updated, or fixed.
+A minor bump does not imply compatibility for any package, and a patch bump can still move a provider across a major upstream version.
+Pin a tag or a commit in `flake.lock` for reproducibility, and read the package versions to learn what changed.
+
 ## Adding a provider
 
 Create `pkgs/terraform-provider-<name>/package.nix`, in a directory named for the attribute you want:
