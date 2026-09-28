@@ -34,6 +34,7 @@ Providers:
 
 | Attribute | Upstream |
 | --- | --- |
+| `terraform-provider-forgejo` | [svalabs/terraform-provider-forgejo](https://github.com/svalabs/terraform-provider-forgejo) |
 | `terraform-provider-gitea` | [go-gitea/terraform-provider-gitea](https://github.com/go-gitea/terraform-provider-gitea) |
 | `terraform-provider-github` | [integrations/terraform-provider-github](https://github.com/integrations/terraform-provider-github) |
 | `terraform-provider-gitlab` | [gitlab-org/terraform-provider-gitlab](https://gitlab.com/gitlab-org/terraform-provider-gitlab) |
