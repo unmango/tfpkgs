@@ -17,7 +17,7 @@
   repository ? null,
   ref ? null,
   state ? null,
-  amend ? false,
+  amend ? null,
   address ? null,
   # Flags placed before the `git` storage subcommand.
   extraBackendArgs ? [ ],
@@ -27,7 +27,7 @@
 
 let
   backendFlags = lib.cli.toCommandLineShellGNU { } { inherit address; };
-  gitFlags = lib.cli.toCommandLineShellGNU { } {
+  gitFlags = lib.cli.toCommandLineShellGNU { explicitBool = true; } {
     inherit
       repository
       ref
