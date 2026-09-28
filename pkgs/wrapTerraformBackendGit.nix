@@ -1,6 +1,7 @@
 {
   lib,
-  writeShellApplication,
+  makeBinaryWrapper,
+  runCommand,
   terraform-backend-git,
 }:
 
@@ -26,33 +27,38 @@
 }:
 
 let
-  backendFlags = lib.cli.toCommandLineShellGNU { } { inherit address; };
-  gitFlags = lib.cli.toCommandLineShellGNU { explicitBool = true; } {
-    inherit
-      repository
-      ref
-      state
-      amend
-      ;
-  };
+  args =
+    lib.cli.toCommandLineGNU { } { inherit address; }
+    ++ extraBackendArgs
+    ++ [ "git" ]
+    ++ lib.cli.toCommandLineGNU { explicitBool = true; } {
+      inherit
+        repository
+        ref
+        state
+        amend
+        ;
+    }
+    ++ extraGitArgs
+    # `--` stops the wrapper's flag parsing so arguments such as `-version`
+    # reach the CLI.
+    ++ [
+      "terraform"
+      "--"
+    ];
 in
-writeShellApplication {
-  inherit name;
+runCommand name
+  {
+    nativeBuildInputs = [ makeBinaryWrapper ];
 
-  runtimeEnv.TF_BACKEND_GIT_WRAPPER_TF_BIN = lib.getExe' terraform name;
+    passthru = { inherit terraform; };
 
-  # `--` stops the wrapper's flag parsing so arguments such as `-chdir=` and
-  # `-version` reach the CLI.
-  text = ''
-    exec ${lib.getExe terraform-backend-git} \
-      ${backendFlags} ${lib.escapeShellArgs extraBackendArgs} \
-      git ${gitFlags} ${lib.escapeShellArgs extraGitArgs} \
-      terraform -- "$@"
-  '';
-
-  passthru = { inherit terraform; };
-
-  meta = (terraform.meta or { }) // {
-    mainProgram = name;
-  };
-}
+    meta = (terraform.meta or { }) // {
+      mainProgram = name;
+    };
+  }
+  ''
+    makeWrapper ${lib.getExe terraform-backend-git} $out/bin/${name} \
+      --set TF_BACKEND_GIT_WRAPPER_TF_BIN ${lib.getExe' terraform name} \
+      ${lib.concatMapStringsSep " " (arg: "--add-flag ${lib.escapeShellArg arg}") args}
+  ''

@@ -40,7 +40,7 @@ Key behaviors a provider definition depends on:
 - `passthru.updateScript` runs `nix-update` then regenerates `gomod2nix.toml`; `make update-package` invokes it.
 - Unrecognized args pass through to `buildGoApplication`; `passthru` and `meta` merge rather than replace.
 
-[pkgs/wrapTerraformBackendGit.nix](pkgs/wrapTerraformBackendGit.nix) takes a terraform or opentofu derivation and returns a same-named CLI that runs it through `terraform-backend-git git ... terraform -- "$@"`.
+[pkgs/wrapTerraformBackendGit.nix](pkgs/wrapTerraformBackendGit.nix) takes a terraform or opentofu derivation and returns a same-named `makeBinaryWrapper` CLI that runs it through `terraform-backend-git git ... terraform -- "$@"`.
 The wrapped binary is passed via `TF_BACKEND_GIT_WRAPPER_TF_BIN`; the `--` keeps top-level flags like `-version` away from cobra.
 
 Go dependencies are pinned per-module in each provider's `gomod2nix.toml`, not with a `vendorHash`.
