@@ -52,6 +52,26 @@ Backends:
 
 `terraform` is a shim exposing `opentofu` under the `terraform` name.
 
+## Storing state in Git
+
+`wrapTerraformBackendGit` wraps a terraform or opentofu CLI so every command runs under [terraform-backend-git](https://github.com/plumber-cd/terraform-backend-git)'s wrapper mode:
+
+```nix
+pkgs.tfpkgs.wrapTerraformBackendGit {
+  terraform = pkgs.opentofu.withPlugins (p: [ p.hashicorp_null ]);
+  repository = "git@github.com:me/state.git";
+  ref = "main";
+  state = "prod/terraform.tfstate";
+}
+```
+
+The result provides a binary with the same name as the wrapped one (`tofu` or `terraform`).
+`repository`, `ref`, `state`, `amend`, and `address` are optional.
+Unset ones fall back to `TF_BACKEND_GIT_*` environment variables or a `terraform-backend-git.hcl` file.
+`extraBackendArgs` and `extraGitArgs` pass further flags before and after the `git` subcommand.
+
+The backend writes `git_http_backend.auto.tf` to the working directory, so run the wrapper from the configuration directory rather than using `-chdir`.
+
 ## Adding a provider
 
 Create `pkgs/terraform-provider-<name>/package.nix`, in a directory named for the attribute you want:
