@@ -1,14 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "github>UnstoppableMango/renovate-config",
-    "schedule:weekly"
+    "github>UnstoppableMango/renovate-config"
   ],
-  "nix": {
-    "enabled": true
-  },
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": ["before 4am every day"]
+    "schedule": [
+      "before 4am"
+    ]
   }
 }
