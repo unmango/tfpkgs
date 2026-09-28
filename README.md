@@ -34,6 +34,7 @@ Providers:
 
 | Attribute | Upstream |
 | --- | --- |
+| `terraform-provider-bitbucket` | [DrFaust92/terraform-provider-bitbucket](https://github.com/DrFaust92/terraform-provider-bitbucket) |
 | `terraform-provider-forgejo` | [svalabs/terraform-provider-forgejo](https://github.com/svalabs/terraform-provider-forgejo) |
 | `terraform-provider-gitea` | [go-gitea/terraform-provider-gitea](https://github.com/go-gitea/terraform-provider-gitea) |
 | `terraform-provider-github` | [integrations/terraform-provider-github](https://github.com/integrations/terraform-provider-github) |
