@@ -6,6 +6,7 @@
 [![Built with Nix](https://img.shields.io/badge/Built_With-Nix-5277C3.svg?logo=nixos&logoColor=white)](https://builtwithnix.org)
 [![Last commit](https://img.shields.io/github/last-commit/unmango/tfpkgs)](https://github.com/unmango/tfpkgs/commits/main)
 [![OpenTofu](https://img.shields.io/badge/OpenTofu-FFDA18?logo=opentofu&logoColor=black)](https://opentofu.org)
+[![Hercules CI](https://hercules-ci.com/api/v1/site/github/account/unmango/project/tfpkgs/badge)](https://hercules-ci.com/github/unmango/tfpkgs)
 
 Nix packages for the Terraform and OpenTofu ecosystem.
 
